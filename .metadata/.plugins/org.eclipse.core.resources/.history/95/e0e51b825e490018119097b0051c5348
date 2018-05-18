@@ -1,0 +1,27 @@
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+
+public class Drivers {
+	public static WebDriver CreateDriver(String type)
+	{
+		WebDriver driver;
+		switch(type)
+		{
+			case "Chrome": 
+				driver = new ChromeDriver(); 
+				System.setProperty("webdriver.chrome.driver", "C:\\Users\\INMETRICS\\Downloads\\drivers\\chromedriver.exe");
+				break;
+			case "Firefox":
+				driver = new FirefoxDriver();
+				System.setProperty("webdriver.gecko.driver", "C:\\Users\\INMETRICS\\Downloads\\drivers\\geckodriver.exe");
+				break;
+			case "IE":
+				driver = new InternetExplorerDriver();
+				System.setProperty("webdriver.ie.driver", "C:\\Users\\INMETRICS\\Downloads\\drivers\\IEDriverServer.exe");
+				break;
+			
+		}
+	}
+}

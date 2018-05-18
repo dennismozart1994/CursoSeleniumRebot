@@ -1,0 +1,15 @@
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class TesteGoogle {
+	
+	public void teste() {
+		// Seta qual navegador o sistema deve abrir
+		System.setProperty("webdriver.gecko.driver", "C:\\Users\\INMETRICS\\Downloads\\drivers\\geckodriver.exe");
+		// Cria um webdriver do tipo Firefox
+		WebDriver driver = new FirefoxDriver();
+		// Acessa a página
+		driver.get("https://www.google.com.br");
+		System.out.println(driver.getTitle());
+	}
+}

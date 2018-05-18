@@ -1,0 +1,30 @@
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+
+public class CadastroDesafio {
+	@Test
+	public void Cadastro()
+	{
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\INMETRICS\\Downloads\\drivers\\chromedriver");
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		driver.findElement(By.id("elementosForm:nome")).sendKeys("Dennis");
+		Assert.assertEquals("Dennis", driver.findElement(By.id("elementosForm:nome")).getAttribute("value"));
+		driver.findElement(By.id("elementosForm:sobrenome")).sendKeys("Mozart da Silva");
+		Assert.assertEquals("Mozart da Silva", driver.findElement(By.id("elementosForm:sobrenome")).getAttribute("value"));
+		driver.findElement(By.id("elementosForm:sexo:0")).click();
+		Assert.assertTrue(driver.findElement(By.id("elementosForm:sexo:0")).isSelected());
+		driver.findElement(By.id("elementosForm:comidaFavorita:2")).click();
+		Assert.assertTrue(driver.findElement(By.id("elementosForm:comidaFavorita:2")).isSelected());
+		WebElement escolaridade = driver.findElement(By.id("elementosForm:escolaridade"));
+		Select combo = new Select(escolaridade);
+		combo.selectByVisibleText("");
+		
+	}
+}

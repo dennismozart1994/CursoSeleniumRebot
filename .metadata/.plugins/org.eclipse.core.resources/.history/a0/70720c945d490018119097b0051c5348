@@ -1,0 +1,12 @@
+import org.openqa.selenium.WebDriver;
+
+public class Drivers {
+	public static WebDriver CreateDriver(String type)
+	{
+		WebDriver driver;
+		switch(type)
+		{
+			case "Chrome": driver = new ChromeDriver(); 
+		}
+	}
+}
