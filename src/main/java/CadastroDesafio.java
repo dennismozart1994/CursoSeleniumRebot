@@ -1,60 +1,65 @@
-import java.util.List;
-
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 
 public class CadastroDesafio {
+	
+	private WebDriver driver;
+	private CampoTreinamentoPage page;
+	
+	@Before
+	public void inicializa()
+	{
+		driver = Drivers.CreateDriver("Chrome");
+		// abre página importada para a pasta sources
+		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		page = new CampoTreinamentoPage(driver);
+	}
+	
+	@After
+	public void fecha()
+	{
+		driver.quit();
+	}
+	
 	@Test
 	public void Cadastro()
 	{
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\INMETRICS\\Downloads\\drivers\\chromedriver.exe");
-		WebDriver driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		page.SetName("Dennis");
+		Assert.assertEquals("Dennis", page.getName(0));
 		
-		driver.findElement(By.id("elementosForm:nome")).sendKeys("Dennis");
-		Assert.assertEquals("Dennis", driver.findElement(By.id("elementosForm:nome")).getAttribute("value"));
+		page.SetSurname("Mozart da Silva");
+		Assert.assertEquals("Mozart da Silva", page.getSurname(0));
 		
-		driver.findElement(By.id("elementosForm:sobrenome")).sendKeys("Mozart da Silva");
-		Assert.assertEquals("Mozart da Silva", driver.findElement(By.id("elementosForm:sobrenome")).getAttribute("value"));
+		page.clickSexo();
+		Assert.assertTrue(page.SexoCheck());
 		
-		driver.findElement(By.id("elementosForm:sexo:0")).click();
-		Assert.assertTrue(driver.findElement(By.id("elementosForm:sexo:0")).isSelected());
+		page.clickComida();
+		Assert.assertTrue(page.FoodCheck());
+
+		page.SelectEscolaridade("Doutorado");
 		
-		driver.findElement(By.id("elementosForm:comidaFavorita:2")).click();
-		Assert.assertTrue(driver.findElement(By.id("elementosForm:comidaFavorita:2")).isSelected());
+		Assert.assertEquals("Doutorado", page.getEscolaridadeValue());
 		
-		WebElement escolaridadeEl = driver.findElement(By.id("elementosForm:escolaridade"));
-		Select combo = new Select(escolaridadeEl);
-		combo.selectByVisibleText("Doutorado");
-		Assert.assertEquals("Doutorado", combo.getFirstSelectedOption().getText());
 		
-		WebElement esportesEl = driver.findElement(By.id("elementosForm:esportes"));
-		Select esportes = new Select(esportesEl);
-		esportes.selectByVisibleText("Futebol");
-		esportes.selectByVisibleText("Corrida");
-		List<WebElement> esportesSelecionados = esportes.getAllSelectedOptions();
-		Assert.assertEquals(2, esportesSelecionados.size());
+		page.SelectSport("Futebol");
+		page.SelectSport("Corrida");
 		
-		driver.findElement(By.id("elementosForm:sugestoes")).sendKeys("Nenhuma sugestão!");
-		Assert.assertEquals("Nenhuma sugestão!", driver.findElement(By.id("elementosForm:sugestoes")).getAttribute("value"));
+		page.TypeSugestions("Nenhuma sugestão!");
+		Assert.assertEquals("Nenhuma sugestão!", page.getSugestions(0));
 		
-		driver.findElement(By.id("elementosForm:cadastrar")).click();
 		
-		Assert.assertTrue(driver.findElement(By.id("resultado")).getText().contains("Cadastrado!"));
-		Assert.assertEquals("Nome: Dennis", driver.findElement(By.id("descNome")).getText());
-		Assert.assertEquals("Sobrenome: Mozart da Silva", driver.findElement(By.id("descSobrenome")).getText());
-		Assert.assertEquals("Sexo: Masculino", driver.findElement(By.id("descSexo")).getText());
-		Assert.assertEquals("Comida: Pizza", driver.findElement(By.id("descComida")).getText());
-		Assert.assertEquals("Escolaridade: doutorado", driver.findElement(By.id("descEscolaridade")).getText());
-		Assert.assertEquals("Esportes: Futebol Corrida", driver.findElement(By.id("descEsportes")).getText());
-		Assert.assertEquals("Sugestoes: Nenhuma sugestão!", driver.findElement(By.id("descSugestoes")).getText());
-	
-		driver.quit();
+		page.CadastrarClick();
+		
+		Assert.assertTrue(page.getResult().contains("Cadastrado!"));
+		Assert.assertEquals("Nome: Dennis", page.getName(1));
+		Assert.assertEquals("Sobrenome: Mozart da Silva", page.getSurname(1));
+		Assert.assertEquals("Sexo: Masculino", page.getSex());
+		Assert.assertEquals("Comida: Pizza", page.getFood());
+		Assert.assertEquals("Escolaridade: doutorado", page.getEscolaridade());
+		Assert.assertEquals("Esportes: Futebol Corrida", page.getSports());
+		Assert.assertEquals("Sugestoes: Nenhuma sugestão!", page.getSugestions(1));
 	}
 }

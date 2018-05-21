@@ -1,131 +1,114 @@
+import java.util.List;
+
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import java.util.*;
 
 public class TesteCampotreinamento {
+	
+	private WebDriver driver;
+	private CampoTreinamentoPage page;
+	
+	@Before
+	public void inicializa()
+	{
+		driver = Drivers.CreateDriver("Chrome");
+		// abre página importada para a pasta sources
+		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		page = new CampoTreinamentoPage(driver);
+	}
+	
+	@After
+	public void fecha()
+	{
+		driver.quit();
+	}
 	
 	// Text Field
 	@Test
 	public void InsereEmTextField()
 	{
-		// Cria driver
-		WebDriver driver = Drivers.CreateDriver("Chrome");
-		// abre página importada para a pasta sources
-		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-		// insere valores no campo texto
-		driver.findElement(By.id("elementosForm:nome")).sendKeys("Teste de Escrita");
-		// Captura valor do campo texto e compara se o valor foi realmente inserido no campo
-		Assert.assertEquals("Teste de Escrita", driver.findElement(By.id("elementosForm:nome")).getAttribute("value"));
-		driver.quit();
+		page.SetName("Teste de Escrita");
+		Assert.assertEquals("Teste de Escrita", page.getName(0));
 	}
 	
 	// Text Area
 	@Test
 	public void InsereEmTextArea()
 	{
-		// Cria driver
-		WebDriver driver = Drivers.CreateDriver("Chrome");
-		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-		// insere valores no campo
-		driver.findElement(By.id("elementosForm:sugestoes")).sendKeys("Teste de Escrita");
+		page.TypeSugestions("Teste de Escrita");
 		// Captura valor do campo e compara se o valor foi realmente inserido no campo
-		Assert.assertEquals("Teste de Escrita", driver.findElement(By.id("elementosForm:sugestoes")).getAttribute("value"));
-		driver.quit();
+		Assert.assertEquals("Teste de Escrita", page.getSugestions(0));
 	}
 	
 	// Radio Button
 		@Test
 		public void MarcaRadioButton()
 		{
-			// Cria driver
-			WebDriver driver = Drivers.CreateDriver("Chrome");
-			driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-			// Marca radio button
-			driver.findElement(By.id("elementosForm:sexo:0")).click();
+			page.clickSexo();
 			// Verifica se o campo está selecionado
-			Assert.assertTrue(driver.findElement(By.id("elementosForm:sexo:0")).isSelected());;
-			driver.quit();
+			Assert.assertTrue(page.SexoCheck());
 		}
 		
 		// Check Box
 		@Test
 		public void MarcaCheckBox()
 		{
-			// Cria driver
-			WebDriver driver = Drivers.CreateDriver("Chrome");
-			driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-			// Marca Check box
-			driver.findElement(By.id("elementosForm:comidaFavorita:2")).click();
+			page.clickComida();
 			// Verifica se o campo está marcado
-			Assert.assertTrue(driver.findElement(By.id("elementosForm:comidaFavorita:2")).isSelected());;
-			driver.quit();
+			Assert.assertTrue(page.FoodCheck());
 		}
 		
 		// Combo Box
 		@Test
 		public void SelecionaComboBox()
 		{
-			// Cria driver
-			WebDriver driver = Drivers.CreateDriver("Chrome");
-			driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
 			// Marca Combo Box
-			WebElement element = driver.findElement(By.id("elementosForm:escolaridade"));
-			Select combo = new Select(element);
-			//combo.selectByIndex(3); // pelo index do combobox
-			//combo.selectByValue("superior"); // pelo value do html
-			combo.selectByVisibleText("2o grau completo"); // pelo texto exibido no combo pro usuário
+			page.SelectEscolaridade("2o grau completo");
 			// Verifica se a seleção foi feita
-			Assert.assertEquals("2o grau completo", combo.getFirstSelectedOption().getText());
-			driver.quit();
+			Assert.assertEquals("2o grau completo", page.getEscolaridadeValue());
 		}
 		
 		// Combo Box de multipla escolhas
 		@Test
 		public void SelecionaMultiploComboBox()
 		{
-			// Cria driver
-			WebDriver driver = Drivers.CreateDriver("Chrome");
-			driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
 			// Seleciona várias opções
+			page.SelectSport("Natacao");
+			page.SelectSport("Corrida");
+			page.SelectSport("O que eh esporte?");
+			
+			// Cria combobox
 			WebElement element = driver.findElement(By.id("elementosForm:esportes"));
 			Select combo = new Select(element);
-			combo.selectByVisibleText("Natacao");
-			combo.selectByVisibleText("Corrida");
-			combo.selectByVisibleText("O que eh esporte?");
-			// Verifica se a seleção foi feita
-			List<WebElement> allSellectedOptions = combo.getAllSelectedOptions();
+			
+			// Verifica quantas seleções foram feitas
+			List<WebElement> allSellectedOptions = combo.getAllSelectedOptions();			
 			Assert.assertEquals(3, allSellectedOptions.size());
-			driver.quit();
 		}
 		
 		// Clicar em botão
 		@Test
 		public void ClicaEmBotão()
 		{
-			// Cria driver
-			WebDriver driver = Drivers.CreateDriver("Chrome");
-			driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
 			// Clica no botão
-			driver.findElement(By.id("buttonSimple")).click();
-			Assert.assertEquals("Obrigado!", driver.findElement(By.id("buttonSimple")).getAttribute("value"));
-			driver.quit();
+			page.ClickButton();
+			Assert.assertEquals("Obrigado!", page.getButtonValue());
 		}
 		
 		// Clicar em link
 		@Test
 		public void ClicaEmLink()
 		{
-			// Cria driver
-			WebDriver driver = Drivers.CreateDriver("Chrome");
-			driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
 			// clica no link
-			driver.findElement(By.linkText("Voltar")).click();
+			page.BackLinkClick();
+			
 			// Checa se clicou no link
-			Assert.assertEquals("Voltou!", driver.findElement(By.id("resultado")).getText());
-			driver.quit();
+			Assert.assertEquals("Voltou!", page.getResult());
 		}
 }

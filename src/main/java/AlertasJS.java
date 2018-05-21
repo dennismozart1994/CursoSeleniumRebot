@@ -1,16 +1,31 @@
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class AlertasJS {
+	
+	private WebDriver driver;
+	
+	@Before
+	public void inicializa()
+	{
+		driver = Drivers.CreateDriver("Chrome");	
+	}
+	
+	@After
+	public void fecha()
+	{
+		driver.quit();
+	}
+	
 	// Alerta Js com botão OK
 	@Test
 	public void AlertSimples()
 	{
-		// Cria driver
-		WebDriver driver = Drivers.CreateDriver("Chrome");
 		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
 		// Clica no botao
 		driver.findElement(By.id("alert")).click();
@@ -22,15 +37,12 @@ public class AlertasJS {
 		
 		// clica no botão OK
 		alert.accept();
-		
 	}
 	
 	// Alerta Js de confirmação
 	@Test
 	public void AlertConfirm()
 	{
-		// Cria driver
-		WebDriver driver = Drivers.CreateDriver("Chrome");
 		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
 		
 		// Cenário de negar alerta
@@ -55,16 +67,12 @@ public class AlertasJS {
 		Assert.assertEquals("Confirmado", alerta.getText());
 		// clica no botão Confirm
 		alerta.accept();
-		
-		driver.quit();
 	}
 	
 	// Alerta Js de confirmação
 		@Test
 		public void PromptAlert()
 		{
-			// Cria driver
-			WebDriver driver = Drivers.CreateDriver("Chrome");
 			driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
 			
 			// Cenário de negar alerta
@@ -82,6 +90,5 @@ public class AlertasJS {
 			alerta.accept();
 			Assert.assertEquals(":D", alerta.getText());
 			alerta.accept();
-			driver.quit();
 		}
 }
