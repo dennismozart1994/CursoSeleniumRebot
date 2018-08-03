@@ -139,4 +139,9 @@ public class CampoTreinamentoPage {
 		return dsl.GetFieldValue("buttonSimple");
 	}
 	
+	
+	public void DeveClicarBotaoTabela(String Coluna, String Nome, String Botao, String IdTabela)
+	{
+		dsl.ClicarBotaoTabela(Coluna, Nome, Botao, IdTabela);
+	}
 }

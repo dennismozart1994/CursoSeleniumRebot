@@ -111,4 +111,10 @@ public class TesteCampotreinamento {
 			// Checa se clicou no link
 			Assert.assertEquals("Voltou!", page.getResult());
 		}
+		
+		@Test
+		public void DeveClicarBotaoTabela()
+		{
+			page.DeveClicarBotaoTabela("Nome", "Maria", "Botao", "elementosForm:tableUsuarios");
+		}
 }
